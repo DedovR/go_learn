@@ -9,5 +9,5 @@ func main() {
 	println(R)
 	r = append(R, r[1:]...)
 
-	println(string(r)) // test
+	println(string(r)) // Rест
 }
