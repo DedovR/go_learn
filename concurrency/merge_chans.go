@@ -9,23 +9,23 @@ import (
 func mergeChannels(chs ...<-chan int) <-chan int {
 	outCh := make(chan int)
 
-	go func(chs []<-chan int, out chan int) {
-		wg := &sync.WaitGroup{}
-		for _, ch := range chs {
-				wg.Add(1)
-				go func(wg *sync.WaitGroup, c <-chan int, out chan int)  {
-						for m := range c {
-								out <- m
-						}
-						wg.Done()
-				}(wg, ch, outCh)
-		}
-		wg.Wait()
+	wg := &sync.WaitGroup{}
+  for _, ch := range chs {
+      wg.Add(1)
+      go func()  {
+        for m := range ch {
+          outCh <- m
+        }
+        wg.Done()
+      }()
+  }
 
-		close(outCh)
-	} (chs, outCh)
+  go func() {
+    wg.Wait()
+    close(outCh)
+  }()
 
-	return outCh
+  return outCh
 }
 
 func main() {

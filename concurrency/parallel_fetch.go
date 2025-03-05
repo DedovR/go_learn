@@ -18,11 +18,10 @@ func main() {
   }
 
   wg := &sync.WaitGroup{}
-  doneCh := make(chan struct{})
   once := &sync.Once{}
+  doneCh := make(chan struct{})
 
   for _, url := range urls {
-
     wg.Add(1)
     go func(url string) {
       defer wg.Done()
